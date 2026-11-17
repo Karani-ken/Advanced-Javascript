@@ -2,6 +2,7 @@
 const list = document.querySelector("#list")
 const filterPrice = document.querySelector("#price_filter")
 const filterBtn = document.querySelector("#filterBtn")
+const resetBtn = document.querySelector("#resetBtn")
 let isFiltered = false;
 //All the products
 const products = [
@@ -14,27 +15,34 @@ const products = [
 
 const isStock = products.some((p) => p.stock === 0)
 console.log(isStock)
-/*function displayList(product) {
-    const li = document.createElement("li");
-    li.textContent = product.name
-    list.append(li)
+function displayList(product) {
+    const card = document.createElement("div");
+    card.classList.add("product-card")
+    card.innerHTML = `
+     <h3>${product.name}</h3>
+     <p>Price: KES ${product.price} </p>
+     <p> Stock: ${product.stock}</p>
+     <p class="${product.stock > 0 ? "in-stock" : "out-of-stock"}"
+        ${product.stock > 0 ? "Available" : "Out of Stock"}
+    </p>
+
+    <button class="select-product" data-id="${product.id}">
+       view Product
+    </button>
+    `
+    list.append(card)
 }
+/*
 products.forEach((product) => displayList(product))
 */
 function displayProducts() {
-    if (isFiltered) {
-        const filteredProducts = products.filter((p) => p.price <= filterPrice.value.trim())
-        filteredProducts.forEach((product) => {
-            const li = document.createElement("li");
-            li.textContent = `${product.name} : KES ${product.price} `
-            list.append(li)
-        })
+    list.innerHTML = ""
+    let price = Number(filterPrice.value.trim())
+    if (isFiltered && price !== "") {
+        const filteredProducts = products.filter((p) => p.price <= price)
+        filteredProducts.forEach((p) => displayList(p))
     } else {
-        products.forEach((product) => {
-            const li = document.createElement("li");
-            li.textContent = `${product.name} : KES ${product.price} `
-            list.append(li)
-        })
+        products.filter((p) => displayList(p))
     }
 }
 
@@ -52,29 +60,46 @@ console.log(names)
 
 //Filter Method
 
-
 filterBtn.addEventListener("click", (e) => {
     e.preventDefault();
-    if (filterPrice.value.trim() === "") {
+
+    if (filterPrice === "") {
+        console.log(filterPrice)
         alert("Enter a price to filter")
     } else {
         isFiltered = true;
-        const filteredProducts = products.filter((p) => p.price <= filterPrice.value.trim())
-        filteredProducts.forEach((product) => {
-            const li = document.createElement("li");
-            li.textContent = `${product.name} : KES ${product.price} `
-            list.append(li)
-        })
+        displayProducts()
     }
 
 })
 
+resetBtn.addEventListener("click", () => {
+    isFiltered = false;
+    filterPrice.value = "";
+    displayProducts();
+})
+
+//initial display
 displayProducts()
 
 
 
-//Products Display 
+//Products Display
 //Filter by price
 //filter by stock
+function getAvailableProducts() {
+    //use filter method to get available products
+    let avaibleProducts = products.filter((p) => p.stock > 0)
+
+    return avaibleProducts;
+}
+function OutOfStock() {
+    const needRestock = products.filter((p) => p.stock === 0)
+    return needRestock;
+}
 // select one product
+function selectOneProduct(id) {
+    const product = products.find((p) => p.id === Number(id))
+    return product;
+}
 //Try to design a Product Card for the products

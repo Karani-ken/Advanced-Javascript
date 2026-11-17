@@ -5,15 +5,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mini Store</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
+    <nav>
+        <h1>Mini Shop</h1>
+        <ul>
+            <li>shop</li>
+            <li>cart</li>
+            <li>categories</li>
+        </ul>
+    </nav>
     <div class="container">
-        <h1>My Store</h1>
-        <div class="products-container">
+       
+        <div>
             <input type="number" id="price_filter" placeholder="Enter price">
             <button id="filterBtn">Filter</button>
-            <ul id="list">
+            <button id="resetBtn">reset filters</button>
+            <ul id="list" class="products-container">
                 
 
             </ul>
